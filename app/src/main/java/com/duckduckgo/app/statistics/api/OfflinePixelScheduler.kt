@@ -22,11 +22,12 @@ import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class OfflinePixelScheduler @Inject constructor(private val workManager: WorkManager) {
+class OfflinePixelScheduler @Inject constructor() {
 
     fun scheduleOfflinePixels() {
 
         Timber.v("Scheduling offline pixels to be sent")
+        val workManager = WorkManager.getInstance()
         workManager.cancelAllWorkByTag(WORK_REQUEST_TAG)
 
         val constraints = Constraints.Builder()

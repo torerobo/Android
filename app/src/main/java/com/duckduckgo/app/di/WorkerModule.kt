@@ -16,10 +16,7 @@
 
 package com.duckduckgo.app.di
 
-import android.content.Context
 import androidx.core.app.NotificationManagerCompat
-import androidx.work.Configuration
-import androidx.work.WorkManager
 import androidx.work.WorkerFactory
 import com.duckduckgo.app.global.view.ClearDataAction
 import com.duckduckgo.app.notification.NotificationFactory
@@ -35,16 +32,6 @@ import javax.inject.Singleton
 
 @Module
 class WorkerModule {
-
-    @Provides
-    @Singleton
-    fun workManager(context: Context, workerFactory: WorkerFactory): WorkManager {
-        val config = Configuration.Builder()
-            .setWorkerFactory(workerFactory)
-            .build()
-        WorkManager.initialize(context, config)
-        return WorkManager.getInstance(context)
-    }
 
     @Provides
     @Singleton

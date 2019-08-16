@@ -40,14 +40,12 @@ interface DataClearer : LifecycleObserver {
 }
 
 class AutomaticDataClearer(
-    private val workManager: WorkManager,
     private val settingsDataStore: SettingsDataStore,
     private val clearDataAction: ClearDataAction,
     private val dataClearerTimeKeeper: BackgroundTimeKeeper
 ) : DataClearer, LifecycleObserver, CoroutineScope {
 
     private val clearJob: Job = Job()
-
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + clearJob
 
@@ -72,7 +70,7 @@ class AutomaticDataClearer(
 
         Timber.i("onAppForegrounded; is from fresh app launch? $isFreshAppLaunch")
 
-        workManager.cancelAllWorkByTag(DataClearingWorker.WORK_REQUEST_TAG)
+        WorkManager.getInstance().cancelAllWorkByTag(DataClearingWorker.WORK_REQUEST_TAG)
 
         val appUsedSinceLastClear = settingsDataStore.appUsedSinceLastClear
         settingsDataStore.appUsedSinceLastClear = true
@@ -118,7 +116,7 @@ class AutomaticDataClearer(
     }
 
     private fun scheduleBackgroundTimerToTriggerClear(durationMillis: Long) {
-        workManager.also {
+        WorkManager.getInstance().also {
             val workRequest = OneTimeWorkRequestBuilder<DataClearingWorker>()
                 .setInitialDelay(durationMillis, TimeUnit.MILLISECONDS)
                 .addTag(DataClearingWorker.WORK_REQUEST_TAG)

@@ -19,7 +19,6 @@
 package com.duckduckgo.app.fire
 
 import androidx.test.annotation.UiThreadTest
-import androidx.work.WorkManager
 import com.duckduckgo.app.global.view.ClearDataAction
 import com.duckduckgo.app.settings.clear.ClearWhatOption
 import com.duckduckgo.app.settings.clear.ClearWhenOption
@@ -38,13 +37,12 @@ class AutomaticDataClearerTest {
     private val mockSettingsDataStore: SettingsDataStore = mock()
     private val mockClearAction: ClearDataAction = mock()
     private val mockTimeKeeper: BackgroundTimeKeeper = mock()
-    private val mockWorkManager: WorkManager = mock()
 
     @UiThreadTest
     @Before
     fun setup() {
         whenever(mockSettingsDataStore.hasBackgroundTimestampRecorded()).thenReturn(true)
-        testee = AutomaticDataClearer(mockWorkManager, mockSettingsDataStore, mockClearAction, mockTimeKeeper)
+        testee = AutomaticDataClearer(mockSettingsDataStore, mockClearAction, mockTimeKeeper)
     }
 
     private suspend fun simulateLifecycle(isFreshAppLaunch: Boolean) {
